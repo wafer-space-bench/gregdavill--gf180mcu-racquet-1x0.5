@@ -21,7 +21,12 @@ module chip_top #(
     inout  wire clk_PAD,
     inout  wire rst_n_PAD,
 
-    inout  wire [NUM_BIDIR_PADS-1:0] bidir_PAD
+    inout  wire [NUM_BIDIR_PADS-1:0] bidir_PAD,
+
+    inout  wire tm_PAD,
+    inout  wire sce_PAD,
+    inout  wire sci_PAD,
+    inout  wire sco_PAD
 );
 
     wire clk_PAD2CORE;
@@ -35,6 +40,12 @@ module chip_top #(
     wire [NUM_BIDIR_PADS-1:0] bidir_CORE2PAD_IE;
     wire [NUM_BIDIR_PADS-1:0] bidir_CORE2PAD_PU;
     wire [NUM_BIDIR_PADS-1:0] bidir_CORE2PAD_PD;
+
+    wire tm_PAD2CORE;
+    wire sce_PAD2CORE;
+    wire sci_PAD2CORE;
+    wire sco_CORE2PAD;
+
 
     // Power/ground pad instances
     generate
@@ -95,6 +106,77 @@ module chip_top #(
         .PD     (1'b0)
     );
 
+
+    (* keep *)
+    gf180mcu_fd_io__in_s tm_pad (
+        `ifdef USE_POWER_PINS
+        .DVDD   (VDD),
+        .DVSS   (VSS),
+        .VDD    (VDD),
+        .VSS    (VSS),
+        `endif
+    
+        .Y      (tm_PAD2CORE),
+        .PAD    (tm_PAD),
+        
+        .PU     (1'b0),
+        .PD     (1'b0)
+    );
+
+    (* keep *)
+    gf180mcu_fd_io__in_s sce_pad (
+        `ifdef USE_POWER_PINS
+        .DVDD   (VDD),
+        .DVSS   (VSS),
+        .VDD    (VDD),
+        .VSS    (VSS),
+        `endif
+    
+        .Y      (sce_PAD2CORE),
+        .PAD    (sce_PAD),
+        
+        .PU     (1'b0),
+        .PD     (1'b0)
+    );
+
+    (* keep *)
+    gf180mcu_fd_io__in_s sci_pad (
+        `ifdef USE_POWER_PINS
+        .DVDD   (VDD),
+        .DVSS   (VSS),
+        .VDD    (VDD),
+        .VSS    (VSS),
+        `endif
+    
+        .Y      (sci_PAD2CORE),
+        .PAD    (sci_PAD),
+        
+        .PU     (1'b0),
+        .PD     (1'b0)
+    );
+
+    (* keep *)
+    gf180mcu_fd_io__bi_24t sco_pad (
+        `ifdef USE_POWER_PINS
+        .DVDD   (VDD),
+        .DVSS   (VSS),
+        .VDD    (VDD),
+        .VSS    (VSS),
+        `endif
+    
+        .A      (sco_CORE2PAD),
+        .OE     (1'b1),
+        .Y      (/* open */),
+        .PAD    (sco_PAD),
+        
+        .CS     (1'b1),
+        .SL     (1'b1),
+        .IE     (1'b0),
+
+        .PU     (1'b0),
+        .PD     (1'b0)
+    );
+
     generate
     for (genvar i=0; i<NUM_BIDIR_PADS; i++) begin : bidir
         (* keep *)
@@ -121,19 +203,6 @@ module chip_top #(
     end
     endgenerate
 
-    // Reset syncroniser
-    logic rst_sync0;
-    logic rst_sync1;
-    always_ff @(posedge clk_PAD2CORE or negedge rst_n_PAD2CORE) begin
-        if(!rst_n_PAD2CORE) begin
-            rst_sync0 <= 1'b0;
-            rst_sync1 <= 1'b0;
-        end else begin
-            rst_sync0 <= rst_n_PAD2CORE;
-            rst_sync1 <= rst_sync0;
-        end
-    end
-
     // Core design
 
     chip_core #(
@@ -145,7 +214,7 @@ module chip_top #(
         `endif
     
         .clk        (clk_PAD2CORE),
-        .rst_n      (rst_sync1),
+        .rst_n      (rst_n_PAD2CORE),
 
         .bidir_in   (bidir_PAD2CORE),
         .bidir_out  (bidir_CORE2PAD),
@@ -155,6 +224,11 @@ module chip_top #(
         .bidir_ie   (bidir_CORE2PAD_IE),
         .bidir_pu   (bidir_CORE2PAD_PU),
         .bidir_pd   (bidir_CORE2PAD_PD)
+
+        // .dft_sce (sce_PAD2CORE),
+        // .dft_sdi(sci_PAD2CORE),
+        // .dft_sdo (sco_CORE2PAD),
+        // .dft_tm (tm_PAD2CORE)
     );
     
     // Chip ID - do not remove, necessary for tapeout

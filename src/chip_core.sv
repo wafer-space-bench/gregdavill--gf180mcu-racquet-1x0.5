@@ -40,7 +40,7 @@ module chip_core #(
     logic [31:0] gpio_a_pu;
     logic [31:0] gpio_a_pd;
 
-    localparam integer GPIOB_NUM = 22;
+    localparam integer GPIOB_NUM = NUM_BIDIR_PADS - 32;
     logic [1:0] gpio_b_alt_in[GPIOB_NUM];
     logic [1:0] gpio_b_alt_out[GPIOB_NUM];
     logic [1:0] gpio_b_alt_dir[GPIOB_NUM];
@@ -54,7 +54,7 @@ module chip_core #(
     logic [GPIOB_NUM-1:0] gpio_b_pu;
     logic [GPIOB_NUM-1:0] gpio_b_pd;
 
-    localparam integer NUM_PROC_CORES = 9;
+    localparam integer NUM_PROC_CORES = 8;
     localparam integer NUM_WB_RESPONDERS = 6;
 
     localparam integer GPIOA_IDX = 0;
@@ -86,6 +86,7 @@ module chip_core #(
     logic        wb_resp_err    [ NUM_WB_RESPONDERS];
 
     // Proc loader signals
+    logic        ram_cs_override;
     logic        loader_enabled;
     logic [ 7:0] loader_wdata   [NUM_PROC_CORES + 1];
     logic        loader_valid   [NUM_PROC_CORES + 1];
@@ -112,6 +113,7 @@ module chip_core #(
                 .wb_ack_i(wb_ack[i]),
 
                 .i_loader_en(loader_enabled),
+                .i_ram_cs_override(ram_cs_override),
 
                 // Loader stream interface in
                 .i_loader_i_wdata(loader_wdata[i]),
@@ -144,6 +146,7 @@ module chip_core #(
         .sck (cfg_spi_sck),
 
         .loader_enabled(loader_enabled),
+        .ram_cs_override(ram_cs_override),
 
         .o_loader_payload(loader_wdata[0]),
         .o_loader_valid  (loader_valid[0]),
@@ -337,14 +340,14 @@ module chip_core #(
     assign gpio_a_in = bidir_in[31:0];
 
     // GPIO B connections to padframe
-    assign bidir_out[53:32] = gpio_b_out;
-    assign bidir_oe[53:32] = gpio_b_dir;
-    assign bidir_ie[53:32] = ~gpio_b_dir;
-    assign bidir_pd[53:32] = gpio_b_pd;
-    assign bidir_pu[53:32] = gpio_b_pu;
-    assign bidir_sl[53:32] = gpio_b_slew;
-    assign bidir_cs[53:32] = gpio_b_schmit;
-    assign gpio_b_in = bidir_in[53:32];
+    assign bidir_out[NUM_BIDIR_PADS-1:32] = gpio_b_out;
+    assign bidir_oe[NUM_BIDIR_PADS-1:32] = gpio_b_dir;
+    assign bidir_ie[NUM_BIDIR_PADS-1:32] = ~gpio_b_dir;
+    assign bidir_pd[NUM_BIDIR_PADS-1:32] = gpio_b_pd;
+    assign bidir_pu[NUM_BIDIR_PADS-1:32] = gpio_b_pu;
+    assign bidir_sl[NUM_BIDIR_PADS-1:32] = gpio_b_slew;
+    assign bidir_cs[NUM_BIDIR_PADS-1:32] = gpio_b_schmit;
+    assign gpio_b_in = bidir_in[NUM_BIDIR_PADS-1:32];
 
     // Hook up peripherals
     assign gpio_a_alt_out[0] = {timer0_out[0], 1'b0};
