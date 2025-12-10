@@ -14,11 +14,16 @@
       url = "github:librelane/librelane/leo/gf180mcu";
       inputs.nix-eda.follows = "nix-eda";
     };
+    difetto = {
+      url = "github:/donn/difetto/main";
+      inputs.librelane.follows = "librelane";
+    };
   };
 
   outputs = {
     self,
     librelane,
+    difetto,
     ...
   }: let
     nix-eda = librelane.inputs.nix-eda;
@@ -31,19 +36,23 @@
       system:
         import nixpkgs {
           inherit system;
-          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default (final: prev: {
+          overlays = [nix-eda.overlays.default devshell.overlays.default difetto.overlays.default librelane.overlays.default (final: prev: {
               magic = prev.magic.override {
                 version = "8.3.576";
                 sha256 = "sha256-IpGOY0oLqIj6gMMzg/BBwkdY6E15/BCTOtShzjnZQXI=";
               };
-            })
-          ];
+              #librelane = prev.librelane.yosys-with-plugins.override {
+              #  plugins ++ [
+              #    difetto.yosys-difetto
+              #  ];
+              #};
+          })];
         }
     );
-    
+
     packages = nix-eda.forAllSystems (system: {
       inherit (self.legacyPackages.${system}.python3.pkgs);
-    });
+      });
     
     devShells = nix-eda.forAllSystems (system: let
       pkgs = (self.legacyPackages.${system});
@@ -62,6 +71,9 @@
           # Waveform viewing
           gtkwave
           surfer
+
+          yosys-difetto
+          quaigh 
         ];
         
         extra-python-packages = with pkgs.python3.pkgs; [
@@ -73,6 +85,9 @@
           
           # For logo generation
           pillow
+
+          # nl2bench
+          librelane-plugin-difetto
         ];
       }) {};
     });
