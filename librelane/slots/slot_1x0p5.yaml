@@ -5,6 +5,8 @@ CORE_AREA: [442, 442, 3490, 2089]
 
 VERILOG_DEFINES: ["SLOT_1X0P5"]
 
+STD_CELL_LIBRARY: gf180mcu_fd_sc_mcu9t5v0
+
 # Specify the pad instances for the padring
 PAD_SOUTH: [
     clk_pad,
