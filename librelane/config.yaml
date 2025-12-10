@@ -1,28 +1,100 @@
 meta:
   version: 3
-  flow: Chip
-  substituting_steps:
+  flow:
+   - Verilator.Lint
+   - Checker.LintTimingConstructs
+   - Checker.LintErrors
+   - Checker.LintWarnings
+   - Yosys.JsonHeader
+  # Swap steps
+  #  - Yosys.Synthesis
+   - Difetto.Synthesis
+   - Difetto.BoundaryScan
+   - Difetto.Resynthesis
+   - Difetto.ScanReplace
+   - Difetto.Cut
 
-    # Disable KLayout DRC
-    #KLayout.DRC: null
-    #Checker.KLayoutDRC: null
+   - Checker.YosysUnmappedCells
+   - Checker.YosysSynthChecks
+   - Checker.NetlistAssignStatements
+   - OpenROAD.CheckSDCFiles
+   - OpenROAD.CheckMacroInstances
+   - OpenROAD.STAPrePNR
+   - OpenROAD.Floorplan
+   - OpenROAD.DumpRCValues
+   - Odb.SetPowerConnections
+   - OpenROAD.PadRing
+   - Odb.CheckMacroAntennaProperties
+   - Odb.ManualMacroPlacement
+   - OpenROAD.CutRows
+   - OpenROAD.TapEndcapInsertion
+   - Odb.AddPDNObstructions
+   - OpenROAD.GeneratePDN
+   - Odb.RemovePDNObstructions
+   - Odb.AddRoutingObstructions
+   - OpenROAD.GlobalPlacementSkipIO
+   - Odb.ApplyDEFTemplate
+   - OpenROAD.GlobalPlacement
+   - Odb.WriteVerilogHeader
+   - Checker.PowerGridViolations
+   - OpenROAD.STAMidPNR
+   - OpenROAD.RepairDesignPostGPL
+   - Odb.ManualGlobalPlacement
+   - OpenROAD.DetailedPlacement
 
-    # Disable KLayout antenna check
-    KLayout.Antenna: null
-    Checker.KLayoutAntenna: null
+   # Add before CTS
+   - Difetto.Chain
 
-    # Disable KLayout density check
-    #KLayout.Density: null
-    #Checker.KLayoutDensity: null
-
-    # Save time during development
-    # Enable for sign-off
-    #OpenROAD.IRDropReport: null
-    #Magic.DRC: null
-    #Checker.MagicDRC: null
-    #KLayout.XOR: null
-    #Netgen.LVS: null
-    #Checker.LVS: null
+   - OpenROAD.CTS
+   - OpenROAD.STAMidPNR
+   - OpenROAD.ResizerTimingPostCTS
+   - OpenROAD.STAMidPNR
+   - OpenROAD.GlobalRouting
+   - OpenROAD.CheckAntennas
+   - OpenROAD.RepairDesignPostGRT
+   - Odb.DiodesOnPorts
+   - Odb.HeuristicDiodeInsertion
+   - OpenROAD.RepairAntennas
+   - OpenROAD.ResizerTimingPostGRT
+   - OpenROAD.STAMidPNR
+   - OpenROAD.DetailedRouting
+   - Odb.RemoveRoutingObstructions
+   - OpenROAD.CheckAntennas
+   - Checker.TrDRC
+   - Odb.ReportDisconnectedPins
+   - Checker.DisconnectedPins
+   - Odb.ReportWireLength
+   - Checker.WireLength
+   - OpenROAD.FillInsertion
+   - Odb.CellFrequencyTables
+  # Issues seen with SCAN_IN/OUT pins not mapping..
+   - OpenROAD.RCX
+   - OpenROAD.STAPostPNR
+   - OpenROAD.IRDropReport
+   - Magic.StreamOut
+   - KLayout.StreamOut
+   - KLayout.XOR
+   - Checker.XOR
+   - KLayout.Antenna
+   - Checker.KLayoutAntenna
+   - KLayout.SealRing
+   - KLayout.Filler
+   - KLayout.Density
+   - Checker.KLayoutDensity
+   - Magic.DRC
+   - KLayout.DRC
+   - Checker.MagicDRC
+   - Checker.KLayoutDRC
+   - Magic.SpiceExtraction
+   - Checker.IllegalOverlap
+   - Netgen.LVS
+   - Checker.LVS
+   - Yosys.EQY
+   - Checker.SetupViolations
+   - Checker.HoldViolations
+   - Checker.MaxSlewViolations
+   - Checker.MaxCapViolations
+   - Misc.ReportManufacturability
 
 DESIGN_NAME: chip_top
 VERILOG_FILES:
@@ -84,6 +156,21 @@ PRIMARY_GDSII_STREAMOUT_TOOL: klayout
 PNR_SDC_FILE: dir::chip_top.sdc
 SIGNOFF_SDC_FILE: dir::chip_top.sdc
 FALLBACK_SDC: dir::chip_top.sdc
+
+# DFT
+DFT_TEST_MODE_WIRE: tm_PAD2CORE
+DFT_TEST_CLOCK_WIRE: clk_PAD2CORE
+DFT_SCAN_IN_PATTERN: sci_pad/Y
+DFT_SCAN_OUT_PATTERN: sco_pad/A
+DFT_SCAN_ENABLE_PATTERN: sce_pad/Y
+DFT_JSON_MAPPING: dir::gf180_mapping.json
+DFT_BSCAN_EXCLUDE_IO:
+  - clk_PAD
+  - tm_PAD
+  - rst_n_PAD
+  - sce_PAD
+  - sci_PAD
+  - sco_PAD
 
 # Power / ground nets
 VDD_NETS:
