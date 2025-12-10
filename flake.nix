@@ -38,8 +38,8 @@
           inherit system;
           overlays = [nix-eda.overlays.default devshell.overlays.default difetto.overlays.default librelane.overlays.default (final: prev: {
               magic = prev.magic.override {
-                version = "8.3.576";
-                sha256 = "sha256-IpGOY0oLqIj6gMMzg/BBwkdY6E15/BCTOtShzjnZQXI=";
+                version = "8.3.581";
+                sha256 = "sha256-mv6ekJsaFx6m828NenIRa4ryZsR7YHB1vWKI+axgx8U=";
               };
               #librelane = prev.librelane.yosys-with-plugins.override {
               #  plugins ++ [
