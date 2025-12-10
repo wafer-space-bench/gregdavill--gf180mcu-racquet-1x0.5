@@ -13,6 +13,8 @@ module racquet (
     output logic       o_loader_valid,
     input  logic       i_loader_ready,
 
+    output logic       ram_cs_override,
+
     output logic loader_enabled
 );
 
@@ -100,6 +102,15 @@ module racquet (
     assign o_loader_payload = resp_data[7:0];
     assign o_loader_valid = (state == S_LOAD) && resp_valid;
 
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            ram_cs_override <= 1'b0;
+        end else begin
+            if((state == S_OPCODE_LOOP) && (resp_valid) && (opcode_reg == 8'h20)) begin
+                ram_cs_override <= resp_data[0];
+            end
+        end
+    end
 
     always_comb begin
         next_state   = state;

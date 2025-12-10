@@ -22,6 +22,7 @@ module proc_wrapper (
     input  logic        wb_ack_i,
 
     input logic i_loader_en,
+    input logic i_ram_cs_override,
 
     // Loader stream interface in
     input  logic [7:0] i_loader_i_wdata,
@@ -131,7 +132,7 @@ module proc_wrapper (
 
         // Default  SRAM to proc
         sram_addr = proc_sram_wen ? proc_sram_waddr : proc_sram_raddr;
-        sram_cen = ~(proc_sram_wen | proc_sram_ren | sram_ren_reg);
+        sram_cen = i_ram_cs_override ? 1'b0 : ~(proc_sram_wen | proc_sram_ren | sram_ren_reg);
         sram_wen = ~proc_sram_wen;
         sram_wdata = proc_sram_wdata;
         proc_sram_rdata = sram_rdata;
