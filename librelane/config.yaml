@@ -9,7 +9,7 @@ meta:
   # Swap steps
   #  - Yosys.Synthesis
    - Difetto.Synthesis
-   - Difetto.BoundaryScan
+  #  - Difetto.BoundaryScan # Looks incompatible with top-level I/O macros
    - Difetto.Resynthesis
    - Difetto.ScanReplace
    - Difetto.Cut
@@ -204,7 +204,7 @@ RUN_POST_GRT_DESIGN_REPAIR: True
 
 # Increase for more logic
 # on your die
-PL_TARGET_DENSITY_PCT: 50
+PL_TARGET_DENSITY_PCT: 75
 GRT_ALLOW_CONGESTION: True
 
 # Fix antenna violations after DRT
@@ -344,32 +344,24 @@ MACROS:
     instances:
       # SRAM cells 
       u_chip_core.gen_proc_wrapper[0].u_proc_wrapper.u_sram:
-        location: ["expr::2800", "expr::549.11 + 0*500"]
+        location: ["expr::2900", "expr::529.11 + 0*520"]
         orientation: W
       u_chip_core.gen_proc_wrapper[1].u_proc_wrapper.u_sram:
-        location: ["expr::2800", "expr::549.11 + 1*500"]
+        location: ["expr::2900", "expr::529.11 + 1*520"]
         orientation: W
       u_chip_core.gen_proc_wrapper[2].u_proc_wrapper.u_sram:
-        location: ["expr::2800", "expr::549.11 + 2*500"]
+        location: ["expr::2900", "expr::529.11 + 2*520"]
         orientation: W
 
       u_chip_core.gen_proc_wrapper[3].u_proc_wrapper.u_sram:
-        location: ["expr::800", "expr::549.11 + 0*500"]
+        location: ["expr::600", "expr::529.11 + 0*520"]
         orientation: E
       u_chip_core.gen_proc_wrapper[4].u_proc_wrapper.u_sram:
-        location: ["expr::800", "expr::549.11 + 1*500"]
+        location: ["expr::600", "expr::529.11 + 1*520"]
         orientation: E
       u_chip_core.gen_proc_wrapper[5].u_proc_wrapper.u_sram:
-        location: ["expr::800", "expr::549.11 + 2*500"]
+        location: ["expr::600", "expr::529.11 + 2*520"]
         orientation: E
-
-
-      u_chip_core.gen_proc_wrapper[6].u_proc_wrapper.u_sram:
-        location: ["expr::1800", "expr::549.11 + 0*500"]
-        orientation: E
-      u_chip_core.gen_proc_wrapper[7].u_proc_wrapper.u_sram:
-        location: ["expr::1800", "expr::549.11 + 2*500"]
-        orientation: W
 
 
 
