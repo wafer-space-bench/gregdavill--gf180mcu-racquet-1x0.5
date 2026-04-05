@@ -15,7 +15,7 @@
       inputs.nix-eda.follows = "nix-eda";
     };
     difetto = {
-      url = "github:/donn/difetto/main";
+      url = "github:donn/difetto/978f710";
       inputs.librelane.follows = "librelane";
     };
   };
@@ -41,11 +41,17 @@
                 version = "8.3.581";
                 sha256 = "sha256-mv6ekJsaFx6m828NenIRa4ryZsR7YHB1vWKI+axgx8U=";
               };
-              #librelane = prev.librelane.yosys-with-plugins.override {
-              #  plugins ++ [
-              #    difetto.yosys-difetto
-              #  ];
-              #};
+              # Override librelane's yosys so withPlugins includes difetto
+              python3 = prev.python3.override {
+                packageOverrides = pyFinal: pyPrev: {
+                  librelane = pyPrev.librelane.override {
+                    yosys = prev.yosys // {
+                      withPlugins = plugins: prev.yosys.withPlugins (plugins ++ [prev.yosys-difetto]);
+                      withPythonPackages = prev.yosys.withPythonPackages;
+                    };
+                  };
+                };
+              };
           })];
         }
     );
