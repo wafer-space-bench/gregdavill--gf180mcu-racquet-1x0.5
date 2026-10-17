@@ -1,0 +1,38 @@
+source:
+  url: https://github.com/gregdavill/gf180mcu-racquet-1x0.5
+  original_url: null
+  kind: fork
+  why: GitHub fork of the upstream repository
+  licence: Apache-2.0
+  upstream_default_branch: develop
+tapeouts:
+- org: wafer.space
+  run: ws-run1
+  slot: GD04
+  project: Racquet Wide 1x0.5
+  size: 1x0p5
+  kind: digital
+  commit: a64a899dabd2
+  commit_source: design_ref head recorded by the ws-run1/2 audit
+  tag: wafer.space/ws-run1/GD04
+  branch: tapeout/wafer.space/ws-run1/GD04
+  page: https://wafer.space/ws-run1/
+- org: wafer.space
+  run: ws-run2
+  slot: GD04
+  project: Racquet Wide 1x0.5
+  size: 1x0p5
+  kind: digital
+  commit: a64a899dabd2
+  commit_source: design_ref head recorded by the ws-run1/2 audit
+  tag: wafer.space/ws-run2/GD04
+  branch: tapeout/wafer.space/ws-run2/GD04
+  page: https://wafer.space/ws-run2/
+generated: '2026-10-17T23:43:56Z'
+tooling: https://github.com/wafer-space/wafer.space-bench
+index: https://wafer-space-bench.github.io
+branches:
+- about
+- tapeout/wafer.space/ws-run1/GD04
+- tapeout/wafer.space/ws-run2/GD04
+- upstream/develop
