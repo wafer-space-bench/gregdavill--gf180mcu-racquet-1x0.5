@@ -12,8 +12,8 @@ Part of the [wafer.space GF180 benchmark](https://wafer-space-bench.github.io): 
 
 | Org | Run | Slot | Project | Size | Commit | Tag / branch |
 |---|---|---|---|---|---|---|
-| wafer.space | [ws-run1](https://wafer.space/ws-run1/) | GD04 | Racquet Wide 1x0.5 | 1x0p5 | `a64a899dabd2` | [`wafer.space/ws-run1/GD04`](https://github.com/wafer-space-bench/gregdavill--gf180mcu-racquet-1x0.5/tree/tapeout/wafer.space/ws-run1/GD04) |
-| wafer.space | [ws-run2](https://wafer.space/ws-run2/) | GD04 | Racquet Wide 1x0.5 | 1x0p5 | `a64a899dabd2` | [`wafer.space/ws-run2/GD04`](https://github.com/wafer-space-bench/gregdavill--gf180mcu-racquet-1x0.5/tree/tapeout/wafer.space/ws-run2/GD04) |
+| wafer.space | [ws-run1](https://wafer.space/ws-run1/) | GD04 | Racquet Wide 1x0.5 | 1x0p5 | `aa954beff91c` | [`wafer.space/ws-run1/GD04`](https://github.com/wafer-space-bench/gregdavill--gf180mcu-racquet-1x0.5/tree/tapeout/wafer.space/ws-run1/GD04) |
+| wafer.space | [ws-run2](https://wafer.space/ws-run2/) | GD04 | Racquet Wide 1x0.5 | 1x0p5 | `aa954beff91c` | [`wafer.space/ws-run2/GD04`](https://github.com/wafer-space-bench/gregdavill--gf180mcu-racquet-1x0.5/tree/tapeout/wafer.space/ws-run2/GD04) |
 
 ## Branches
 

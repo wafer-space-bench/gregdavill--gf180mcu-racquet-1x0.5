@@ -12,7 +12,7 @@ tapeouts:
   project: Racquet Wide 1x0.5
   size: 1x0p5
   kind: digital
-  commit: a64a899dabd2
+  commit: aa954beff91c
   commit_source: design_ref head recorded by the ws-run1/2 audit
   tag: wafer.space/ws-run1/GD04
   branch: tapeout/wafer.space/ws-run1/GD04
@@ -23,12 +23,12 @@ tapeouts:
   project: Racquet Wide 1x0.5
   size: 1x0p5
   kind: digital
-  commit: a64a899dabd2
+  commit: aa954beff91c
   commit_source: design_ref head recorded by the ws-run1/2 audit
   tag: wafer.space/ws-run2/GD04
   branch: tapeout/wafer.space/ws-run2/GD04
   page: https://wafer.space/ws-run2/
-generated: '2026-10-17T23:43:56Z'
+generated: '2026-10-24T08:14:34Z'
 tooling: https://github.com/wafer-space/wafer.space-bench
 index: https://wafer-space-bench.github.io
 branches:
